@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Aplicaciones Nuzic</title>
+
+  <!-- Ubuntu de Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap"
+    rel="stylesheet">
+
+  <style>
+    :root {
+      --cream:        #EEE8D8;
+      --dark:         #43433B;
+      --red:          #E76F68;
+      --blue:         #7BB4CD;
+      --light-blue:   #BDD9E6;
+      --mint:         #CBEFE1;
+      --orange:       #FFBB33;
+      --yellow:       #FFEECC;
+      --pink:         #F28AAD;
+      --salmon:       #F5C6C2;
+      --pale-pink:    #FFE5EE;
+    }
+    @font-face {
+      font-family: 'Bariol';
+      src:
+        url('fonts/Bariol-Regular.woff2') format('woff2'),
+        url('fonts/Bariol-Regular.woff')  format('woff');
+      font-weight: normal;
+      font-style: normal;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+    body {
+      background: var(--dark);
+      color: var(--cream);
+      font-family: 'Bariol', sans-serif;
+      line-height:1.5;
+    }
+    a { text-decoration:none; color:inherit; }
+    h1 {
+      text-align:center;
+      font-family:'Ubuntu',sans-serif;
+      font-weight:700;
+      font-size:2.5rem;
+      color:var(--red);
+      margin:2rem 0;
+    }
+    .container {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+      gap:2rem;
+      max-width:1200px;
+      margin:0 auto 4rem;
+      padding:0 1rem;
+    }
+    .card {
+      background:var(--cream);
+      border-radius:8px;
+      overflow:hidden;
+      box-shadow:0 4px 12px rgba(0,0,0,0.3);
+      transition:transform .3s ease;
+    }
+    .card:hover { transform:translateY(-5px); }
+    .card img { width:100%; display:block; }
+    .card h3 {
+      font-family:'Ubuntu',sans-serif;
+      font-weight:700;
+      font-size:1.25rem;
+      color:var(--dark);
+      padding:1rem;
+    }
+    .card a:hover h3 { color:var(--orange); }
+  </style>
+</head>
+<body>
+  <h1>Aplicaciones Nuzic</h1>
+  <main class="container">
+    <!-- 1. Aleatorizador -->
+    <article class="card">
+      <a href="Aleatorizador_de_Elementos_2/">
+        <img src="images/aleatorizador.png" alt="Aleatorizador de Elementos">
+        <h3>Aleatorizador de Elementos</h3>
+      </a>
+    </article>
+    <!-- 2. Fracciones rítmicas -->
+    <article class="card">
+      <a href="Fracciones_rítmicas/">
+        <img src="images/fracciones.png" alt="Fracciones rítmicas">
+        <h3>Fracciones rítmicas</h3>
+      </a>
+    </article>
+    <!-- 3. Fórmula temporal -->
+    <article class="card">
+      <a href="Formula_Temporal/">
+        <img src="images/formula.png" alt="Fórmula temporal">
+        <h3>Fórmula temporal</h3>
+      </a>
+    </article>
+    <!-- 4. Modulación Escalas Madre -->
+    <article class="card">
+      <a href="Modulacion_Escalas_/">
+        <img src="images/modulacion.png" alt="Modulación Escalas Madre">
+        <h3>Modulación Escalas Madre</h3>
+      </a>
+    </article>
+    <!-- 5. Sucesión entre Escalas Madre -->
+    <article class="card">
+      <a href="Sucesion_entre_Escalas_Madre/">
+        <img src="images/sucesion.png" alt="Sucesión entre Escalas Madre">
+        <h3>Sucesión entre Escalas Madre</h3>
+      </a>
+    </article>
+    <!-- 6. AcMod y transformaciones -->
+    <article class="card">
+      <a href="AcMod_y_transformaciones/">
+        <img src="images/acmod.png" alt="AcMod y transformaciones">
+        <h3>AcMod y transformaciones</h3>
+      </a>
+    </article>
+    <!-- 7. Matriz Rangos Variables -->
+    <article class="card">
+      <a href="Matriz_Rangos_Variables/">
+        <img src="images/matriz.png" alt="Matriz Rangos Variables">
+        <h3>Matriz Rangos Variables</h3>
+      </a>
+    </article>
+  </main>
+</body>
+</html><!DOCTYPE html>
+<html lang='ca'>
+<head>
+  <meta charset='UTF-8'>
+  <title>Apps Nuzic</title>
+</head>
+<body>
+  <h1>Aplicacions Nuzic</h1>
+  <ul>
+    <li><a href='AcMod_y_transformaciones/'>AcMod y transformaciones</a></li>
+    <li><a href='Aleatorizador_de_Elementos_2/'>Aleatorizador de Elementos 2</a></li>
+    <li><a href='Formula_Temporal/'>Formula Temporal</a></li>
+    <li><a href='Fracciones_rítmicas/'>Fracciones rítmicas</a></li>
+    <li><a href='Matriz_Rangos_Variables/'>Matriz Rangos Variables</a></li>
+    <li><a href='Modulacion_Escalas_/'>Modulacion Escalas_</a></li>
+    <li><a href='Sucesion_entre_Escalas_Madre/'>Sucesion entre Escalas Madre</a></li>
+  </ul>
+</body>
+</html>
