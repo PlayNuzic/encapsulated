@@ -1,70 +1,32 @@
 #!/usr/bin/env bash
-set -eux
+set -eux  # segueix fallant en errors, però només si existeix la variable
 
-# ── 0) Desactiva qualsevol proxy HTTP/HTTPS globalment ───────────────
-unset http_proxy https_proxy HTTP_PROXY HTTPS_PROXY
-git config --global --unset http.proxy  || true
-git config --global --unset https.proxy || true
+# 1) instal·la git si cal
+command -v git >/dev/null 2>&1 || { apt-get update -y && apt-get install -y git; }
 
-# ── 0.1) Reconfigura SSH per redirigir github.com al port 443 ────────
-mkdir -p ~/.ssh
-cat > ~/.ssh/config << 'EOF'
-Host github.com
-  HostName ssh.github.com
-  Port 443
-  User git
-  IdentityFile ~/.ssh/id_ed25519
-  StrictHostKeyChecking no
-EOF
-chmod 600 ~/.ssh/config
+# 2) configura nom i email de l’usuari Codex
+git config --global user.name  "PlayNuzic-Codex"
+git config --global user.email "codex@playnuzic.local"
 
-# ── 1) Instal·la Git i SSH client si no estan presents ────────────────
-if ! command -v git >/dev/null 2>&1; then
-  apt-get update
-  apt-get install -y git openssh-client netcat
-fi
+# 3) obté l’URL del repositori a partir del remote (si el clon ja existeix)
+REMOTE_URL="$(git config --get remote.origin.url || true)"
 
-# ── 2) Clona el repo si encara no existeix el .git ────────────────────
-if [ ! -d ".git" ]; then
-  git clone git@github.com:PlayNuzic/encapsulated.git .
-fi
-
-# ── 3) Inicia l’agent SSH i afegeix la teva clau ──────────────────────
-eval "$(ssh-agent -s)"
-
-if [ -n "${SSH_KEY-}" ]; then
-  :
-elif [ -f "${HOME}/.ssh/id_ed25519" ]; then
-  export SSH_KEY="$(cat "${HOME}/.ssh/id_ed25519")"
-elif [ -f "${HOME}/.ssh/id_rsa" ]; then
-  export SSH_KEY="$(cat "${HOME}/.ssh/id_rsa")"
+# 4) genera l’URL HTTPS amb PAT
+if [ -n "${GITHUB_TOKEN-}" ]; then
+  # si no tenim remote o és SSH, refem l’URL
+  if [[ -z "$REMOTE_URL" || "$REMOTE_URL" == git@github.com:* ]]; then
+    REPO_PATH="$(basename "$(pwd)").git"                  # exemple: aleatorizador.git
+    REPO_HTTPS="https://${GITHUB_TOKEN}@github.com/PlayNuzic/${REPO_PATH}"
+    git remote remove origin 2>/dev/null || true
+    git remote add    origin "$REPO_HTTPS"
+  else
+    # només canviem el remote perquè porti el token
+    REPO_HTTPS="$(sed -E "s#https://.*@github#https://${GITHUB_TOKEN}@github#" <<<"$REMOTE_URL")"
+    git remote set-url origin "$REPO_HTTPS"
+  fi
 else
-  echo "ERROR: no s'ha trobat cap clau SSH a ~/.ssh" >&2
+  echo "ERROR: la variable secreta GITHUB_TOKEN no està definida" >&2
   exit 1
 fi
 
-echo "$SSH_KEY" > ~/.ssh/id_ed25519
-chmod 600 ~/.ssh/id_ed25519
-ssh-add ~/.ssh/id_ed25519
-
-# ── 4) Afegim GitHub al known_hosts ───────────────────────────────────
-ssh-keyscan github.com >> ~/.ssh/known_hosts
-
-# ── 5) Instal·la i autentica amb GitHub CLI via PAT ───────────────────
-if ! command -v gh >/dev/null 2>&1; then
-  apt-get update -y
-  apt-get install -y gh
-fi
-
-echo "Autenticant amb GitHub CLI…"
-echo "$GITHUB_TOKEN" | gh auth login --with-token
-gh auth status
-
-# ── 6) Sincronitza la branca aleatorizador ───────────────────────────
-git fetch --all
-git checkout aleatorizador
-
-# ── 7) Pull amb rebase (o merge si cal) ──────────────────────────────
-git pull --rebase origin aleatorizador || git pull origin aleatorizador
-
-echo "=== Entorn completament configurat. Ja pots fer git push origin aleatorizador ==="
+echo "✅ Entorn preparat. Pots fer git add / commit / push via HTTPS amb el token."
